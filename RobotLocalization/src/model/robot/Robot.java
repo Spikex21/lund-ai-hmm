@@ -24,13 +24,13 @@ public class Robot {
 	public void move() {
 		double moves[] = new double[4];
 		if(isInBounds(x-1, y))
-			moves[0] = transitionMatrix[tMatrixFormula(x, y, heading, RobotManager.Y_LENGTH)][tMatrixFormula(x-1, y, 0, RobotManager.Y_LENGTH)];
+			moves[0] = transitionMatrix[tMatrixFormula(x, y, heading)][tMatrixFormula(x-1, y, 0)];
 		if(isInBounds(x, y+1))
-			moves[1] = transitionMatrix[tMatrixFormula(x, y, heading, RobotManager.Y_LENGTH)][tMatrixFormula(x, y+1, 1, RobotManager.Y_LENGTH)];
+			moves[1] = transitionMatrix[tMatrixFormula(x, y, heading)][tMatrixFormula(x, y+1, 1)];
 		if(isInBounds(x+1, y))
-			moves[2] = transitionMatrix[tMatrixFormula(x, y, heading, RobotManager.Y_LENGTH)][tMatrixFormula(x+1, y, 2, RobotManager.Y_LENGTH)];
+			moves[2] = transitionMatrix[tMatrixFormula(x, y, heading)][tMatrixFormula(x+1, y, 2)];
 		if(isInBounds(x, y-1))
-			moves[3] = transitionMatrix[tMatrixFormula(x, y, heading, RobotManager.Y_LENGTH)][tMatrixFormula(x, y-1, 3, RobotManager.Y_LENGTH)];
+			moves[3] = transitionMatrix[tMatrixFormula(x, y, heading)][tMatrixFormula(x, y-1, 3)];
 		
 		Random gen = new Random();
 		double roll = gen.nextDouble();
@@ -57,7 +57,7 @@ public class Robot {
 					int newY = y + yFromH(h);
 					double remainingChance = 1;
 					if(isInBounds(newX, newY)) {
-						transitionMatrix[tMatrixFormula(x,y,h,yLength)][tMatrixFormula(newX,newY,h,yLength)] = .7;
+						transitionMatrix[tMatrixFormula(x,y,h)][tMatrixFormula(newX,newY,h)] = .7;
 						remainingChance = .3;
 					}
 					int neighborCount = 0;
@@ -76,16 +76,16 @@ public class Robot {
 						newX = x + xFromH(ih);
 						newY = y + yFromH(ih);
 						if(isInBounds(newX, newY))
-							transitionMatrix[tMatrixFormula(x,y,h,yLength)][tMatrixFormula(newX,newY,ih,yLength)] = neighborOdds;		
+							transitionMatrix[tMatrixFormula(x,y,h)][tMatrixFormula(newX,newY,ih)] = neighborOdds;		
 					}
 				}
 			}
 		}
 	}
-	public static int tMatrixFormula(int x, int y, int h, int yLength) {
+	public static int tMatrixFormula(int x, int y, int h) {
 		if(!isInBounds(x, y))
 			throw new IllegalArgumentException();
-		return (x * yLength + y) * 4 + h;
+		return (x * RobotManager.Y_LENGTH + y) * 4 + h;
 	}
 	private static int xFromH(int h) {
 		if(h > 3 || h < 0)
@@ -97,7 +97,7 @@ public class Robot {
 			throw new IllegalArgumentException();
 		return (2-h)%2;
 	}
-	private static boolean isInBounds(int x, int y) {
+	public static boolean isInBounds(int x, int y) {
 		return (x < RobotManager.X_LENGTH && x >= 0 && y < RobotManager.Y_LENGTH && y >= 0);
 	}
 

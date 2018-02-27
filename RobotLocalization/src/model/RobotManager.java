@@ -2,6 +2,7 @@ package model;
 
 import control.EstimatorInterface;
 import model.robot.Robot;
+import model.robot.Sensor;
 
 public class RobotManager implements EstimatorInterface{
 	public static final int X_LENGTH = 8;
@@ -56,16 +57,14 @@ public class RobotManager implements EstimatorInterface{
 
 	@Override
 	public double getOrXY(int rX, int rY, int x, int y, int h) {
-		// TODO Auto-generated method stub
-		/*
-		 * This is a meaty section
-		 */
-		return 0;
+		if(rX == -1 || rY == -1)
+			return Sensor.observationVectors[Sensor.observationVectors.length-1][Robot.tMatrixFormula(x, y, 0)/4];
+		return Sensor.observationVectors[Robot.tMatrixFormula(rX, rY, 0)/4][Robot.tMatrixFormula(x, y, 0)/4];
 	}
 
 	@Override
 	public double getTProb(int x, int y, int h, int nX, int nY, int nH) {
-		return Robot.transitionMatrix[Robot.tMatrixFormula(x, y, h, Y_LENGTH)][Robot.tMatrixFormula(nX, nY, nH, Y_LENGTH)];
+		return Robot.transitionMatrix[Robot.tMatrixFormula(x, y, h)][Robot.tMatrixFormula(nX, nY, nH)];
 	}
 
 }
