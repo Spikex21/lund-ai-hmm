@@ -5,18 +5,10 @@ import model.robot.Robot;
 import model.robot.Sensor;
 
 public class RobotManager implements EstimatorInterface{
-	public static final int X_LENGTH = 8;
-	public static final int Y_LENGTH = 8;
+	public static final int X_LENGTH = 5;
+	public static final int Y_LENGTH = 5;
 	public Robot robot;
 	public double[] f = new double[X_LENGTH * Y_LENGTH * 4];
-	
-	
-	public static void main(String[] Args) {
-		RobotManager x = new RobotManager();
-		double y = x.getCurrentProb(1, 5);
-		System.out.println("prob: " + y);
-		
-	}
 	
 	public RobotManager() {
 		robot = new Robot(X_LENGTH, Y_LENGTH);
@@ -62,16 +54,33 @@ public class RobotManager implements EstimatorInterface{
 	@Override
 	public double getCurrentProb(int x, int y) {
 		/*
+		 *         Equation 15.12 in the book
 		 * f_1:t+1 = α * O_t+1 * T transposed * f_1:t 
 		 * (returns column vector - above x, y determine state meaning index)
 		 * 
 		 * alpha - normalization
+		 * O_t+1 - diagonal observation matrix based off sensor reading
+		 * T transposed - transition matrix transposed
+		 * f_1:t - position estimate 
 		 * 
+		 *  <<<< f_1:0 is supposed to be the initial position estimate, which I just made equal for
+		 *  	every position >>>>
+		 *  
+		 *  Helpful stuff:
+		 *  - lecture 9 (slides 18 and 19)
+		 *  - 15.3.1 section in the book
+		 *  - equation 15.5 and surrounding info
 		 */
 		
 		int states = X_LENGTH*Y_LENGTH*4;
+		double[][] obsMatrix;
 		
-		double[][] obsMatrix = Sensor.getMatrixFromVector(Sensor.observationVectors[Robot.tMatrixFormula(robot.sensor.x, robot.sensor.y, 0)/4]);
+		if (robot.sensor.x == -1) {
+			obsMatrix = Sensor.getMatrixFromVector(Sensor.observationVectors[Sensor.observationVectors.length-1]);
+		} else {
+			obsMatrix = Sensor.getMatrixFromVector(Sensor.observationVectors[Robot.tMatrixFormula(robot.sensor.x, robot.sensor.y, 0)/4]);
+		}
+		
 		
 		double[][] tTransposed = new double[states][states];
 		
