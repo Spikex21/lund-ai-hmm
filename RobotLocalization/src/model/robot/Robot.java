@@ -100,6 +100,5 @@ public class Robot {
 	public static boolean isInBounds(int x, int y) {
 		return (x < RobotManager.X_LENGTH && x >= 0 && y < RobotManager.Y_LENGTH && y >= 0);
 	}
-
 	
 }
