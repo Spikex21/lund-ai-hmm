@@ -75,7 +75,7 @@ public class RobotManager implements EstimatorInterface{
 		int states = X_LENGTH*Y_LENGTH*4;
 		double[][] obsMatrix;
 		
-		if (robot.sensor.x == -1) {
+		if (robot.sensor.x == -1 || robot.sensor.y == -1) {
 			obsMatrix = Sensor.getMatrixFromVector(Sensor.observationVectors[Sensor.observationVectors.length-1]);
 		} else {
 			obsMatrix = Sensor.getMatrixFromVector(Sensor.observationVectors[Robot.tMatrixFormula(robot.sensor.x, robot.sensor.y, 0)/4]);
@@ -119,8 +119,7 @@ public class RobotManager implements EstimatorInterface{
 			f[i] = fNonNormalized[i] / sum;
 		}
 		
-		return f[Robot.tMatrixFormula(x, y, 0)] + f[Robot.tMatrixFormula(x, y, 1)] + 
-				f[Robot.tMatrixFormula(x, y, 2)] + f[Robot.tMatrixFormula(x, y, 3)];
+		return f[Robot.tMatrixFormula(x, y, 0)/4];
 	}
 	
 	
