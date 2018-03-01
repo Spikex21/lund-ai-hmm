@@ -36,6 +36,7 @@ public class RobotManager implements EstimatorInterface{
 	@Override
 	public void update() {
 		robot.move();
+		updateF();
 		
 	}
 
@@ -53,6 +54,28 @@ public class RobotManager implements EstimatorInterface{
 
 	@Override
 	public double getCurrentProb(int x, int y) {
+		double squareSum = 0;
+		for(int h = 0; h < 4; h++) {
+			squareSum += f[Robot.tMatrixFormula(x, y, h)];
+		}
+		return squareSum;
+	}
+	
+	
+
+	@Override
+	public double getOrXY(int rX, int rY, int x, int y, int h) {
+		if(rX == -1 || rY == -1)
+			return Sensor.observationVectors[Sensor.observationVectors.length-1][Robot.tMatrixFormula(x, y, 0)/4];
+		return Sensor.observationVectors[Robot.tMatrixFormula(rX, rY, 0)/4][Robot.tMatrixFormula(x, y, 0)/4];
+	}
+
+	@Override
+	public double getTProb(int x, int y, int h, int nX, int nY, int nH) {
+		return Robot.transitionMatrix[Robot.tMatrixFormula(x, y, h)][Robot.tMatrixFormula(nX, nY, nH)];
+	}
+	
+	public void updateF() {
 		/*
 		 *         Equation 15.12 in the book
 		 * f_1:t+1 = α * O_t+1 * T transposed * f_1:t 
@@ -117,23 +140,8 @@ public class RobotManager implements EstimatorInterface{
 		
 		for (int i = 0; i < states; i++) {
 			f[i] = fNonNormalized[i] / sum;
+			System.out.println(i + ":   "+f[i]);
 		}
-		
-		return f[Robot.tMatrixFormula(x, y, 0)/4];
-	}
-	
-	
-
-	@Override
-	public double getOrXY(int rX, int rY, int x, int y, int h) {
-		if(rX == -1 || rY == -1)
-			return Sensor.observationVectors[Sensor.observationVectors.length-1][Robot.tMatrixFormula(x, y, 0)/4];
-		return Sensor.observationVectors[Robot.tMatrixFormula(rX, rY, 0)/4][Robot.tMatrixFormula(x, y, 0)/4];
-	}
-
-	@Override
-	public double getTProb(int x, int y, int h, int nX, int nY, int nH) {
-		return Robot.transitionMatrix[Robot.tMatrixFormula(x, y, h)][Robot.tMatrixFormula(nX, nY, nH)];
 	}
 
 }
