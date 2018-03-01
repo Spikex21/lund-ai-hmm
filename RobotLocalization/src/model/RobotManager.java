@@ -119,7 +119,8 @@ public class RobotManager implements EstimatorInterface{
 			f[i] = fNonNormalized[i] / sum;
 		}
 		
-		return f[Robot.tMatrixFormula(x, y, 0)/4];
+		return f[Robot.tMatrixFormula(x, y, 0)] + f[Robot.tMatrixFormula(x, y, 1)] + 
+				f[Robot.tMatrixFormula(x, y, 2)] + f[Robot.tMatrixFormula(x, y, 3)];
 	}
 	
 	
