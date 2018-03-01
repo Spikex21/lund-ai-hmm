@@ -5,8 +5,8 @@ import model.robot.Robot;
 import model.robot.Sensor;
 
 public class RobotManager implements EstimatorInterface{
-	public static final int X_LENGTH = 5;
-	public static final int Y_LENGTH = 5;
+	public static final int X_LENGTH = 6;
+	public static final int Y_LENGTH = 6;
 	public Robot robot;
 	public double[] f = new double[X_LENGTH * Y_LENGTH * 4];
 	
