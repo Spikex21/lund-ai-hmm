@@ -84,9 +84,9 @@ public class RobotManager implements EstimatorInterface{
 		
 		double[][] tTransposed = new double[states][states];
 		
-		for (int i = 0; i < states; i++) {
-			int start = 1;
-			
+		int start = 0;
+
+		for (int i = 0; i < states; i++) {		
 			for (int k = start; k < states; k++) {
 				tTransposed[i][k] = Robot.transitionMatrix[k][i];
 				tTransposed[k][i] = Robot.transitionMatrix[i][k];
@@ -94,7 +94,7 @@ public class RobotManager implements EstimatorInterface{
 			start++;
 		}
 		
-		double[][] tempMatrixMultiply = new double[X_LENGTH*Y_LENGTH*4][X_LENGTH*Y_LENGTH*4];
+		double[][] tempMatrixMultiply = new double[states][states];
 		
 		for (int i = 0; i < states; i++) {
 			for (int j = 0; j < states; j++) {	
