@@ -15,9 +15,9 @@ public class Robot {
 	public Robot(int xLength, int yLength) {
 		fillTransitionMatrix(xLength, yLength);
 		Random gen = new Random();
-		x = 0;//gen.nextInt(xLength);
-		y = 0;//gen.nextInt(yLength);
-		heading = 1;//gen.nextInt(4);
+		x = gen.nextInt(xLength);
+		y = gen.nextInt(yLength);
+		heading = gen.nextInt(4);
 		sensor = new Sensor(x, y);
 	}
 	
